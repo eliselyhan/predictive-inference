@@ -64,9 +64,9 @@ def ARWQE(U, B_arr, alpha, delta, gamma=1):
     for k in range(w):
 
         #NOTE: this part can be changed
-        tmp = np.array([ np.abs(Fti_qtk_all[i,k] - (1-alpha)) - (psi_all[k] - psi_all[i])*gamma for i in range(k + 1) ])
+        tmp = np.array([ np.abs(Fti_qtk_all[i,k] - (1-alpha)) - (psi_all[k] + psi_all[i])*gamma for i in range(k + 1) ])
         tmp[tmp < 0] = 0
-        phi_hat_all[k] = np.max(tmp)
+        phi_hat_all[k] = np.max(tmp) * (5 / 12)
 
     # Choose k_hat
     k_hat = np.argmin(phi_hat_all + psi_all)
