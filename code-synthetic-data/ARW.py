@@ -45,15 +45,13 @@ def prepare(U, B_arr, alpha):
     B_rev = B_arr[::-1]
     Btk_all = np.cumsum(B_rev)
 
-    #compute B_tk for each k
     #compute empirical quantiles for each k 
-    #NOTE: np.quantile interpolates between samples
-    qtk_all = np.array( [np.quantile( U[period_starts[i]:], 1-alpha) for i in range(t)] )[::-1]
+    qtk_all = np.array( [np.quantile( U[period_starts[i]:], 1-alpha, method='inverted_cdf') for i in range(t)] )[::-1]
 
     Fti_qtk_all = np.zeros((t,t))
 
     for i in range(t):
-        Fti_qtk_all[i,:] = cdfhat_arr(qtk_all, U[period_starts[t-i-1]:])
+        Fti_qtk_all[i,i:] = cdfhat_arr(qtk_all[i:], U[period_starts[t-i-1]:])
 
     return Btk_all, qtk_all, Fti_qtk_all
 
