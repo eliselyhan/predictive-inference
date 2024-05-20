@@ -1,5 +1,7 @@
 #ARW functions
 import numpy as np
+from scipy.stats import norm
+
 
 #compute cdfhat(q)
 def cdfhat(q, arr):
@@ -41,6 +43,9 @@ def prepare(U, B_arr, alpha):
     period_starts = period_ends - B_arr
 
     t = len(B_arr)
+
+    #create an array of power of 2 smaller than len(B_arr)
+    k_sizes =  [2**i for i in range(int(np.log2(t)))]
     
     B_rev = B_arr[::-1]
     Btk_all = np.cumsum(B_rev)
@@ -90,3 +95,9 @@ def ARWQE(U, B_arr, alpha, delta, gamma=1):
     # Choose k_hat
     k_hat = np.argmin(phi_hat_all + psi_all)
     return k_hat+1, qtk_all[k_hat], qtk_all
+
+def calculate_coverage(y_hat, qt_khat, mu_t, variance):
+    y_upp = y_hat + qt_khat
+    y_low = y_hat - qt_khat
+    coverage = norm.cdf(y_upp, mu_t, np.sqrt(variance)) - norm.cdf(y_low, mu_t, np.sqrt(variance))
+    return coverage
