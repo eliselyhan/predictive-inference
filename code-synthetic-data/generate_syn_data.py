@@ -113,3 +113,8 @@ def fit_and_get_scores(X_tr, y_tr, X_val, y_val):
     S = np.abs(y_val - reg.predict(X_val))
     return reg, S
 
+def monte_carlo_coverage(y_hat, q, Y_test):
+    y_upp = y_hat + q
+    y_low = y_hat - q
+    coverage = np.mean((Y_test <= y_upp) & (Y_test >= y_low))
+    return coverage

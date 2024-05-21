@@ -53,7 +53,7 @@ def prepare(U, B_arr, alpha):
     """ U_expand = expand_U_tk(U)
     qtk_all = np.nanquantile(U_expand, 1-alpha, axis=0)[::-1]
     """
-    qtk_all = np.array( [np.quantile( U[period_starts[i]:], 1-alpha) for i in range(t)] )[::-1]
+    qtk_all = np.array( [np.quantile( U[period_starts[i]:], 1-alpha, method='inverted_cdf') for i in range(t)] )[::-1]
 
     Fti_qtk_all = np.zeros((t,t))
 
@@ -87,11 +87,11 @@ def ARWQE(U, B_arr, psi_all, alpha, gamma=1):
     for k in range(t):
 
         #NOTE: this part can be changed
-        tmp = np.array([ np.abs(Fti_qtk_all[i,k] - (1-alpha)) - (psi_all[k] - psi_all[i])*gamma for i in range(k + 1) ])
+        tmp = np.array([ np.abs(Fti_qtk_all[i,k] - (1-alpha)) - (psi_all[k] + psi_all[i])*gamma for i in range(k + 1) ])
         #print(tmp<0)
         tmp[tmp < 0] = 0
         phi_hat_all[k] = np.max(tmp)
 
     # Choose k_hat
-    k_hat = np.argmin(phi_hat_all + psi_all)
+    k_hat = np.argmin((5/12) * phi_hat_all + psi_all)
     return k_hat+1, qtk_all[k_hat], qtk_all
