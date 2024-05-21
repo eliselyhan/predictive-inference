@@ -65,8 +65,8 @@ def summarize_interval_dict(methods, num_trials, num_periods, interval_dict):
             interval_array[i, trial, :] = interval
 
     #take average of interval over time and trials for each method
-    mean_interval = 2 * np.mean(np.mean(interval_array[:, :, 100:], axis=2), axis=1)
-    se_interval = np.std(2 * np.mean(interval_array[:, :, 100:], axis=2), axis=1)/np.sqrt(num_trials)
+    mean_interval = np.mean(np.mean(interval_array[:, :, 100:], axis=2), axis=1)
+    se_interval = np.std(np.mean(interval_array[:, :, 100:], axis=2), axis=1)/np.sqrt(num_trials)
     #barplot errors
     fig, ax = plt.subplots()
     plt.title('Mean Interval Length')

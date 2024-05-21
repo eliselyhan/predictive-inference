@@ -118,3 +118,9 @@ def monte_carlo_coverage(y_hat, q, Y_test):
     y_low = y_hat - q
     coverage = np.mean((Y_test <= y_upp) & (Y_test >= y_low))
     return coverage
+
+def check_coverage(y_hat, q, y_test):
+    y_upp = y_hat + q
+    y_low = y_hat - q
+    coverage = (y_test <= y_upp) & (y_test >= y_low)
+    return coverage
