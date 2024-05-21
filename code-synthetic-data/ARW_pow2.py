@@ -18,7 +18,7 @@ def compute_psi(Btk_all, alpha, delta):
     sigma_bin = alpha *(1-alpha) 
 
     #NOTE: this part can be changed
-    psi_all = np.sqrt(2 * sigma_bin * np.log(1/delta) / Btk_all)
+    psi_all = np.sqrt(sigma_bin * np.log(1/delta) / Btk_all)
 
     return psi_all
 
