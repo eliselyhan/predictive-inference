@@ -74,35 +74,3 @@ def calculate_coverage(y_hat, qt_khat, mu_t, variance):
     y_low = y_hat - qt_khat
     coverage = norm.cdf(y_upp, mu_t, np.sqrt(variance)) - norm.cdf(y_low, mu_t, np.sqrt(variance))
     return coverage
-
-
-#######################
-
-def QE_fixed(U, B_arr, alpha, window):
-    T = len(B_arr)
-    k = min(window, T)
-    start_k = np.sum(B_arr[0:(T - k)])
-    q_hat = np.quantile( U[start_k:], 1 - alpha, method='inverted_cdf')
-    return q_hat
-
-
-def weighted_quantile(x, q, weights): # compute weighted quantile
-    sorter = np.argsort(x)
-    sorted_values = x[sorter]
-    sorted_weights = weights[sorter]
-    cumulative_weights = np.cumsum(sorted_weights)
-    percentile_cutoffs = np.quantile(cumulative_weights, q, method = 'inverted_cdf')
-    return np.interp(percentile_cutoffs, cumulative_weights, sorted_values)
-
-
-def QE_weighted(U, B_arr, alpha, rho):
-    period_ends = np.cumsum(B_arr) 
-    period_starts = period_ends - B_arr
-    T = len(B_arr)
-    weights = np.ones(len(U))
-    for t in range(1, T):
-        weights[period_starts[T - 1 - t]:period_ends[T - 1 - t]] = (rho ** t)
-    q_hat = weighted_quantile( U, 1 - alpha, weights = weights)
-    return q_hat
-
-
