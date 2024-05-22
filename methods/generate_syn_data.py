@@ -124,3 +124,8 @@ def check_coverage(y_hat, q, y_test):
     y_low = y_hat - q
     coverage = (y_test <= y_upp) & (y_test >= y_low)
     return coverage
+
+def fit_LS_get_scores(X_tr, Y_tr, X_val, Y_val):
+    beta_hat = np.linalg.solve(X_tr.T.dot(X_tr), X_tr.T.dot(Y_tr))
+    S = np.abs(X_val.dot(beta_hat) - Y_val)
+    return beta_hat, S

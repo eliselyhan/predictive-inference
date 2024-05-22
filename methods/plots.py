@@ -54,7 +54,7 @@ def summarize_cdf_dict(methods, num_trials, num_periods, cdf_dict, alpha):
     fig, ax = plt.subplots()
     plt.title('Mean Squared Error')
     for i in range(len(methods)):
-        ax.bar(methods[i], mae[i], color=colors[i])
+        ax.bar(methods[i], mse[i], color=colors[i])
 
     return cdf_array, mae_array, mae, se_ae, mse_array, mse, se_mse
 
