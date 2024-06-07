@@ -160,7 +160,7 @@ def sample_idx(B_arr, B_arr_train, B_arr_val, B_arr_test, seed):
 
 
 # XGBoost or random forest
-def test(data, algo, t, window_sizes_train, window_sizes_infer, weights, test_next = False, alpha = 0.1, delta = 0.1, seed = 2024, log = False):
+def test(data, algo, t, window_sizes_train, window_sizes_infer, weights, test_next = False, alpha = 0.1, delta = 0.1, seed = 2024):
     assert algo == 'XGB' or algo == 'RF'
     assert t >= 0 and t < len(data[0][2])
     if test_next:
@@ -172,21 +172,12 @@ def test(data, algo, t, window_sizes_train, window_sizes_infer, weights, test_ne
     [X_val, y_val, B_arr_val] = data_val
     [X_test, y_test, B_arr_test] = data_test
 
+    scaler = StandardScaler()
+
     if algo == 'XGB':
         regressor = XGBRegressor(random_state = seed)
-        scaler = StandardScaler()
-        X_train = scaler.fit_transform(X_train)
-        X_val = scaler.transform(X_val)
-        X_test = scaler.transform(X_test)
- 
-        if log:       
-            y_train = np.log(y_train)
-            y_val = np.log(y_val)
-            y_test = np.log(y_test)
-
     elif algo == 'RF':
         regressor = RandomForestRegressor(random_state = seed)
-
 
     end_train = np.sum(B_arr_train[0:(t+1)])
     end_val = np.sum(B_arr_val[0:(t+1)])
@@ -218,14 +209,17 @@ def test(data, algo, t, window_sizes_train, window_sizes_infer, weights, test_ne
         # training
         r = window_sizes_train[i]
         start_train = np.sum(B_arr_train[0:max(t - r + 1, 0)])
-        regressor.fit(X_train[start_train:end_train], y_train[start_train:end_train])
+        X_train_i = scaler.fit_transform(X_train[start_train:end_train])
+        regressor.fit(X_train_i, y_train[start_train:end_train])
 
         # compute comformity scores of validation data
-        y_pred_val = regressor.predict(X_val[0:end_val])
+        X_val_i = scaler.transform(X_val[0:end_val])
+        y_pred_val = regressor.predict(X_val_i)
         scores_val = np.abs(y_val[0:end_val] - y_pred_val)
 
         # compute comformity scores of test data
-        y_pred_test = regressor.predict(X_test[start_test:end_test])
+        X_test_i = scaler.transform(X_test[start_test:end_test])
+        y_pred_test = regressor.predict(X_test_i)
         scores_test = np.abs(y_true_test - y_pred_test)
         
         # quantile estimation
@@ -258,7 +252,7 @@ def test(data, algo, t, window_sizes_train, window_sizes_infer, weights, test_ne
     return results
 
 
-def test_online(data, algo, list_t, window_sizes_train, window_sizes_infer, weights, test_next = True, alpha = 0.1, delta = 0.1, seed = 2024, log=False):
+def test_online(data, algo, list_t, window_sizes_train, window_sizes_infer, weights, test_next = True, alpha = 0.1, delta = 0.1, seed = 2024):
     assert algo == 'RF' or algo == 'XGB'
 
     num_train = len(window_sizes_train)
@@ -275,7 +269,7 @@ def test_online(data, algo, list_t, window_sizes_train, window_sizes_infer, weig
     width_baseline = np.zeros(num_t)
 
     for (i, t) in enumerate(list_t):        
-        tmp = test(data, algo, t, window_sizes_train, window_sizes_infer, weights, test_next = test_next, alpha = alpha, delta = delta, seed = seed, log = log)
+        tmp = test(data, algo, t, window_sizes_train, window_sizes_infer, weights, test_next = test_next, alpha = alpha, delta = delta, seed = seed)
 
         freq_ARW[i] = tmp['freq_ARW']
         freq_fixed[i] = tmp['freq_fixed']
