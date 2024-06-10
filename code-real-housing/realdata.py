@@ -3,14 +3,16 @@ import pandas as pd
 from datetime import datetime
 from sklearn.preprocessing import LabelEncoder
 import collections
-import matplotlib.pyplot as plt
 from sklearn import metrics
-from tqdm import tqdm
 
 from sklearn.ensemble import RandomForestRegressor
 from xgboost import XGBRegressor
 from sklearn.preprocessing import StandardScaler
-from ARWQE import ARWQE, QE_fixed, QE_weighted
+
+import sys
+sys.path.insert(0, '/content/drive/MyDrive/Colab Notebooks/NeurIPS2024/methods/')
+sys.modules.pop('ARWQE', None)
+from ARWQE import *
 
 # Data:
 # https://www.dubaipulse.gov.ae/data/dld-transactions/dld_transactions-open
