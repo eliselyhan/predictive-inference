@@ -2,7 +2,7 @@
 
 ## Python implementations
 
-The file <a href="./methods/ARWQE.py">`ARWQE.py`</a> provides Python implementations of 
+The file <a href="./methods/ARWQE.py">`ARWQE.py`</a> provides Python implementations of the
 Adaptive Rolling Window Quantile Estimation(ARWQE) method used as a subroutine for predictive inference. 
 
 1. Function `ARWQE`: Adaptive Rolling Window for Quantile Estimation (Algorithm 1 in the paper).
