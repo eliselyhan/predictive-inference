@@ -14,7 +14,7 @@ The folders `code-synthetic-data`, `code-real-housing` contain all the code for 
 
 ## Citation
 ```
-@article{HHW24,
+@article{HHW24b,
   title={Distribution-Free Predictive Inference under Unknown Temporal Drift}, 
   author={Han, Elise and Huang, Chengpiao and Wang, Kaizheng},
   journal={arXiv preprint arXiv:2406.06516},
