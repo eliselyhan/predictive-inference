@@ -1,4 +1,5 @@
 # Distribution-Free Predictive Inference under Unknown Temporal Drift
+Paper: Paper: Han, E., Huang, C. and Wang, K., 2024. Distribution-Free Predictive Inference under Unknown Temporal Drift. [arXiv preprint arXiv:2406.06516](https://arxiv.org/abs/2406.06516).
 
 ## Python implementations
 
@@ -12,3 +13,11 @@ Adaptive Rolling Window Quantile Estimation(ARWQE) method used as a subroutine f
 The folders `code-synthetic-data`, `code-real-housing` contain all the code for reproducing the experimental results.
 
 ## Citation
+```
+@article{HHW24,
+  title={Distribution-Free Predictive Inference under Unknown Temporal Drift}, 
+  author={Han, Elise and Huang, Chengpiao and Wang, Kaizheng},
+  journal={arXiv preprint arXiv:2406.06516},
+  year={2024}
+}
+```
